@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pod-restarter
+  labels:
+    app: pod-restarter
+spec:
+  template:
+    spec:
+      serviceAccount: pod-restarter
+      restartPolicy: Never
+      containers:
+        - name: pod-restarter
+          image: bitnami/kubectl:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              kubectl get deployments -o=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | xargs -I "{}" kubectl rollout restart deployments {}
