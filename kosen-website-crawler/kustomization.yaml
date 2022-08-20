@@ -1,0 +1,8 @@
+resources:
+  - cronjob.yaml
+  - sealedsecret.yaml
+
+images:
+  - name: kosen-website-crawler
+    newName: ghcr.io/windyakin/kosen-website-crawler
+    newTag: latest
