@@ -14,7 +14,17 @@ spec:
           containers:
             - name: pod-restarter
               image: bitnami/kubectl:latest
-              command: ["/bin/sh", "-c"]
-              args:
-                - |
-                  kubectl get deployments -o=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | xargs -I "{}" kubectl rollout restart deployments {}
+              command:
+                - /pod-restarter.sh
+              volumeMounts:
+                - name: pod-restarter
+                  mountPath: /pod-restarter.sh
+                  subPath: pod-restarter.sh
+          volumes:
+            - name: pod-restarter
+              configMap:
+                name: pod-restarter
+                items:
+                  - key: pod-restarter.sh
+                    path: pod-restarter.sh
+                    mode: 0755
