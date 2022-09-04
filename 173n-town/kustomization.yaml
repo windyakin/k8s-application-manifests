@@ -1,0 +1,8 @@
+resources:
+  - cronjob.yaml
+  - sealedsecret.yaml
+
+images:
+  - name: 173n-town
+    newName: ghcr.io/windyakin/173n-town
+    newTag: latest
