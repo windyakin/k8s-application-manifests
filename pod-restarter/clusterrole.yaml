@@ -4,17 +4,10 @@ metadata:
   name: pod-restarter
 rules:
   - apiGroups:
-      - ""
-    resources:
-      - pods
-    verbs:
-      - get
-      - list
-      - delete
-  - apiGroups:
       - apps
     resources:
       - deployments
     verbs:
       - get
+      - patch
       - list

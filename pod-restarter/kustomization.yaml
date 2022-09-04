@@ -3,3 +3,8 @@ resources:
   - serviceaccount.yaml
   - clusterrole.yaml
   - clusterrolebinding.yaml
+
+configMapGenerator:
+  - name: pod-restarter
+    files:
+      - ./configmap/pod-restarter.sh
