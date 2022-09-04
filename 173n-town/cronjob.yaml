@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: 173n-town
+spec:
+  schedule: "0 10 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: 173n-town
+              image: 173n-town
+              imagePullPolicy: Always
+              env:
+                - name: PUPPETEER_TIMEOUT
+                  value: '100000'
+                - name: TOWN_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: 173n-town
+                      key: TOWN_USER
+                - name: TOWN_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: 173n-town
+                      key: TOWN_PASS
+                - name: SLACK_WEBHOOK_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: 173n-town
+                      key: SLACK_WEBHOOK_URL
