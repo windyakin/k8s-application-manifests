@@ -10,22 +10,6 @@ RaspberryPi で動かしている k3s 向けの Manifests を管理する場所
 curl -sfL https://get.k3s.io | sh -
 ```
 
-### SealedSecret のインストール
-
-* 最新バージョンは https://github.com/bitnami-labs/sealed-secrets/releases を確認
-
-```
-kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/${VERSION}/controller.yaml
-```
-
-#### (参考) Secret の SealedSecret 化
-
-* SealedSecret のコマンドラインツールが必要
-
-```
-kubeseal --scope cluster-wide -o yaml < secret.yaml > sealedsecret.yaml
-```
-
 ### ArgoCD のインストール
 
 * Web UI 入れると妙に重いのでコア機能だけ入れる
@@ -59,8 +43,19 @@ refs: https://argo-cd.readthedocs.io/en/stable/user-guide/commands/argocd_repo_a
 argocd app create argocd-applications \
   --repo git@github.com:windyakin/k8s-application-manifests.git \
   --path argocd-application \
+  --sync-policy auto \
   --auto-prune \
   --dest-namespace default \
   --dest-server https://kubernetes.default.svc \
   --revision HEAD
+```
+
+### External Secrets について
+
+External Secrets の Provider には [Doppler](https://www.doppler.com/) を使っている
+
+[SecretStore](https://external-secrets.io/latest/api/secretstore/) が参照する dopplerToken は Doppler から発行した Service Token を自前で追加する必要がある
+
+```
+kubectl create secret generic external-secrets-{{app_name}} -n default --from-literal doppler-token="dp.st.xxxx"
 ```
