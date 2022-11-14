@@ -1,7 +1,7 @@
 resources:
   - cronjob.yaml
   - secretstore.yaml
-  - externalsecrets.yaml
+  - externalsecret.yaml
 
 images:
   - name: 173n-town
